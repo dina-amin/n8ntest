@@ -1,6 +1,6 @@
 {
  "scripts": {
-  "start": "Main ITI Chatbot start",
-  "build": "Main ITI Chatbot build"
+  "start": "chatbot start",
+  "build": "chatbot build"
  }
 }

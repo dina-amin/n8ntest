@@ -1,6 +1,6 @@
 {
  "scripts": {
-  "start": "chatbot start",
-  "build": "chatbot build"
+  "start": "chatbot.json start",
+  "build": "chatbot.json build"
  }
 }

@@ -1,0 +1,246 @@
+{
+  "name": "Main ITI Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -200,
+        -80
+      ],
+      "id": "93661833-ee3e-4344-b81a-0ea286a6cb48",
+      "name": "When chat message received",
+      "webhookId": "54af3a4d-947f-4dfc-82de-c20158965da7"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are an AI assistance specialized in analyzing Data scientist track curriculum questions. Your primary task is to answer questions accuratly and preciesly using vector database which contain relavant documents.\nOnly provide information that you retrieved from documents ot trusted sources. if something is not included in dataset or not clear, clearly state that you do not have sufficient information.\n\nStructure of your response must be\nConsise and to the point\nSpecific numbers and facts, when available.  \nObjective\nProvide user with reliable and quick insights from  Data scientist track curriculum without unnecessary details."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -60,
+        -80
+      ],
+      "id": "6144cb73-0750-4f69-94f1-41cabe910645",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "description": "Return documents related to Data scientist track curriculum, courses and duration"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        20
+      ],
+      "id": "1567bc52-c488-4a69-9254-51dc7df38cbc",
+      "name": "Answer questions with a vector store"
+    },
+    {
+      "parameters": {
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "iti-chatbot-openai",
+          "mode": "list",
+          "cachedResultName": "iti-chatbot-openai"
+        },
+        "options": {
+          "pineconeNamespace": "iti-chatbot-openai"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.1,
+      "position": [
+        180,
+        100
+      ],
+      "id": "e39df1d1-cfdc-4f53-bf6b-29b7c060ebc6",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "dSI64r1WQBSPlnsF",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        80
+      ],
+      "id": "4ccf5477-5dd4-421a-9068-813cbe6ad27a",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "DZn7TCJaaRBnWmoi",
+          "name": "OpenAi account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        580,
+        240
+      ],
+      "id": "36b2ecd9-d32d-4bcc-b8c1-4ddc874aca77",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "DZn7TCJaaRBnWmoi",
+          "name": "OpenAi account 3"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        40,
+        80
+      ],
+      "id": "742eb94e-8deb-4086-bf6d-13bbf15a2e3b",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        340,
+        220
+      ],
+      "id": "eacf2dff-da03-4ad3-a539-da234e272193",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "DZn7TCJaaRBnWmoi",
+          "name": "OpenAi account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer questions with a vector store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ef6f1b1f-11d7-4263-8193-b94447fe924c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7d15e486626c7f2d1621c7be7349f976a39dfff831983b1cc20e9d75f5d947ae"
+  },
+  "id": "vWdFBMQVmFSKD847",
+  "tags": []
+}
